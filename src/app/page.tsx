@@ -6,7 +6,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
 import { useRouter } from 'next/navigation';
-import ClientOnly from '../components/ClientOnly'; // 👈 Importado aqui
+import ClientOnly from '../components/ClientOnly';
 
 const MINT = new PublicKey("4qoK3wdGaEqVBbTzJVztCKCPc35Cz11XzbvUx2TGpump");
 const RPC = "https://newest-misty-darkness.solana-mainnet.quiknode.pro/af6310c5314f899ae52cbc545812bd8903835b23/";
@@ -27,8 +27,10 @@ export default function Home() {
         const account = await getAccount(connection, ata);
         if (account.amount > 0n) {
           setHasToken(true);
+        } else {
+          setHasToken(false);
         }
-      } catch (e) {
+      } catch {
         setHasToken(false);
       }
     };
@@ -44,7 +46,7 @@ export default function Home() {
       <div className="bg-white/70 rounded-2xl p-6 text-center max-w-md shadow-xl">
         <h1 className="text-3xl font-bold mb-4">🚀 Meme Coin - Solana</h1>
         <p className="mb-4">
-          Um projeto para levar sua coin direto para a lua 🌕 com staking, rewards e uma comunidade insana.
+          A project to send your coin to the moon 🌕 with staking, rewards, and an insane community.
         </p>
 
         <div className="mb-4">
@@ -68,7 +70,7 @@ export default function Home() {
             onClick={() => router.push('/member')}
             className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
           >
-            Acessar Área de Membros
+            Enter Member Area
           </button>
         )}
       </div>
