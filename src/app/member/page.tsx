@@ -137,7 +137,7 @@ export default function MemberDashboard() {
 
         <div className="text-center">
           <button
-            onClick={() => router.push('/src/members/talk')}
+            onClick={() => router.push('/members/talk')}
             className="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700"
           >
             🌐 Join the Community
