@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2020", // <-- alterado de ES2017 para ES2020
+    "lib": ["dom", "dom.iterable", "es2020"], // <-- atualizado de "esnext" para "es2020"
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
