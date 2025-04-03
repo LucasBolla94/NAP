@@ -6,10 +6,12 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
 import { useRouter } from 'next/navigation';
-import ClientOnly from '../components/ClientOnly';
+import dynamic from 'next/dynamic';
 
-const MINT = new PublicKey("4qoK3wdGaEqVBbTzJVztCKCPc35Cz11XzbvUx2TGpump");
-const RPC = "https://newest-misty-darkness.solana-mainnet.quiknode.pro/af6310c5314f899ae52cbc545812bd8903835b23/";
+const ClientOnly = dynamic(() => import('../components/ClientOnly'), { ssr: false });
+
+const MINT = new PublicKey('4qoK3wdGaEqVBbTzJVztCKCPc35Cz11XzbvUx2TGpump');
+const RPC = 'https://newest-misty-darkness.solana-mainnet.quiknode.pro/af6310c5314f899ae52cbc545812bd8903835b23/';
 
 export default function Home() {
   const wallet = useWallet();
@@ -25,11 +27,7 @@ export default function Home() {
 
       try {
         const account = await getAccount(connection, ata);
-        if (account.amount > 0n) {
-          setHasToken(true);
-        } else {
-          setHasToken(false);
-        }
+        setHasToken(account.amount > 0n);
       } catch {
         setHasToken(false);
       }
