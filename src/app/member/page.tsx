@@ -5,18 +5,28 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
 import { useRouter } from 'next/navigation';
-import { doc, getDocs, setDoc, collection, addDoc } from 'firebase/firestore';
+import { doc, getDocs, setDoc, collection, addDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '@/app/lib/firebase';
 
 const MINT = new PublicKey('4qoK3wdGaEqVBbTzJVztCKCPc35Cz11XzbvUx2TGpump');
 const RPC = 'https://solana-mainnet.g.alchemy.com/v2/demo';
+
+type Poll = {
+  id: string;
+  question: string;
+  active: boolean;
+  results?: {
+    yes: number;
+    no: number;
+  };
+};
 
 export default function MemberDashboard() {
   const wallet = useWallet();
   const router = useRouter();
   const [hasToken, setHasToken] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
-  const [polls, setPolls] = useState<{ id: string; question: string; active: boolean; results?: { yes: number; no: number } }[]>([]);
+  const [polls, setPolls] = useState<Poll[]>([]);
   const [question, setQuestion] = useState('');
 
   useEffect(() => {
@@ -40,7 +50,10 @@ export default function MemberDashboard() {
   useEffect(() => {
     const fetchPolls = async () => {
       const snapshot = await getDocs(collection(db, 'polls'));
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any;
+      const data: Poll[] = snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Poll[];
       setPolls(data);
     };
     fetchPolls();
