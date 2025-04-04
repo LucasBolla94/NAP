@@ -87,7 +87,7 @@ export default function Home() {
         {wallet.connected && !loading && (
           <>
             <div className="text-white text-sm mb-2">
-              Your $NAP balance: {formattedBalance.toLocaleString()} tokens
+              Your $NAP balance: {formattedBalance.toLocaleString()} $NAP
             </div>
 
             {hasOneMillion ? (
