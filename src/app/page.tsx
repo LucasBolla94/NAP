@@ -14,24 +14,27 @@ const RPC = "https://newest-misty-darkness.solana-mainnet.quiknode.pro/af6310c53
 export default function Home() {
   const wallet = useWallet();
   const router = useRouter();
-  const [hasToken, setHasToken] = useState(false);
+  const [balance, setBalance] = useState<bigint>(0n);
 
   useEffect(() => {
-    const checkToken = async () => {
+    const checkTokenBalance = async () => {
       if (!wallet.publicKey) return;
       const connection = new Connection(RPC);
       const ata = await getAssociatedTokenAddress(MINT, wallet.publicKey);
 
       try {
         const account = await getAccount(connection, ata);
-        setHasToken(account.amount > 0n);
+        setBalance(account.amount);
       } catch {
-        setHasToken(false);
+        setBalance(0n);
       }
     };
 
-    checkToken();
+    checkTokenBalance();
   }, [wallet.publicKey]);
+
+  const formattedBalance = Number(balance) / 1e6; // assuming 6 decimals (Solana padrão)
+  const hasOneMillion = balance >= 1_000_000n;
 
   return (
     <main
@@ -68,7 +71,13 @@ export default function Home() {
           </button>
         </a>
 
-        {wallet.connected && hasToken && (
+        {wallet.connected && (
+          <div className="text-white text-sm mb-2">
+            Your $NAP balance: {formattedBalance.toLocaleString()} tokens
+          </div>
+        )}
+
+        {wallet.connected && hasOneMillion && (
           <button
             onClick={() => router.push('/member')}
             className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 w-full transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
@@ -77,8 +86,8 @@ export default function Home() {
           </button>
         )}
 
-        {wallet.connected && !hasToken && (
-          <p className="text-yellow-300 mt-4">You need to hold the token to access the member area.</p>
+        {wallet.connected && !hasOneMillion && (
+          <p className="text-yellow-300 mt-4 font-semibold">🔒 Member Area - 1M $NAP minimum</p>
         )}
       </div>
     </main>

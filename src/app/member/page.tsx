@@ -9,7 +9,7 @@ import { doc, getDocs, setDoc, collection, addDoc, QueryDocumentSnapshot, Docume
 import { db } from '@/app/lib/firebase';
 
 const MINT = new PublicKey('4qoK3wdGaEqVBbTzJVztCKCPc35Cz11XzbvUx2TGpump');
-const RPC = 'https://solana-mainnet.g.alchemy.com/v2/demo';
+const RPC = 'https://newest-misty-darkness.solana-mainnet.quiknode.pro/af6310c5314f899ae52cbc545812bd8903835b23/';
 
 type Poll = {
   id: string;
