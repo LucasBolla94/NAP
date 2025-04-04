@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meme Coin - Powered by Solana",
+  title: "Koala NapReserv",
   description: "A fun and powerful meme coin community built on Solana blockchain.",  
 };
 
