@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token';
+import { getAssociatedTokenAddress, getAccount, getMint } from '@solana/spl-token';
 import { useRouter } from 'next/navigation';
 import ClientOnly from '../components/ClientOnly';
 
@@ -14,27 +14,40 @@ const RPC = "https://newest-misty-darkness.solana-mainnet.quiknode.pro/af6310c53
 export default function Home() {
   const wallet = useWallet();
   const router = useRouter();
+
   const [balance, setBalance] = useState<bigint>(0n);
+  const [decimals, setDecimals] = useState<number>(6); // valor padrão
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkTokenBalance = async () => {
       if (!wallet.publicKey) return;
+
+      setLoading(true);
       const connection = new Connection(RPC);
       const ata = await getAssociatedTokenAddress(MINT, wallet.publicKey);
 
       try {
         const account = await getAccount(connection, ata);
+        const mintInfo = await getMint(connection, MINT);
+
         setBalance(account.amount);
-      } catch {
+        setDecimals(mintInfo.decimals);
+      } catch (err) {
+        console.error("Erro ao buscar balance:", err);
         setBalance(0n);
+      } finally {
+        setLoading(false);
       }
     };
 
-    checkTokenBalance();
-  }, [wallet.publicKey]);
+    if (wallet.connected) {
+      checkTokenBalance();
+    }
+  }, [wallet.publicKey, wallet.connected]);
 
-  const formattedBalance = Number(balance) / 1e6; // assuming 6 decimals (Solana padrão)
-  const hasOneMillion = balance >= 1_000_000n;
+  const formattedBalance = Number(balance) / Math.pow(10, decimals);
+  const hasOneMillion = balance >= BigInt(1_000_000 * Math.pow(10, decimals));
 
   return (
     <main
@@ -71,23 +84,25 @@ export default function Home() {
           </button>
         </a>
 
-        {wallet.connected && (
-          <div className="text-white text-sm mb-2">
-            Your $NAP balance: {formattedBalance.toLocaleString()} tokens
-          </div>
-        )}
+        {wallet.connected && !loading && (
+          <>
+            <div className="text-white text-sm mb-2">
+              Your $NAP balance: {formattedBalance.toLocaleString()} tokens
+            </div>
 
-        {wallet.connected && hasOneMillion && (
-          <button
-            onClick={() => router.push('/member')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 w-full transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
-          >
-            🔐 Enter Member Area
-          </button>
-        )}
-
-        {wallet.connected && !hasOneMillion && (
-          <p className="text-yellow-300 mt-4 font-semibold">🔒 Member Area - 1M $NAP minimum</p>
+            {hasOneMillion ? (
+              <button
+                onClick={() => router.push('/member')}
+                className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 w-full transition-all duration-300 ease-in-out shadow-lg hover:scale-105"
+              >
+                🔐 Enter Member Area
+              </button>
+            ) : (
+              <p className="text-yellow-300 mt-4 font-semibold">
+                🔒 Member Area - 1M $NAP minimum
+              </p>
+            )}
+          </>
         )}
       </div>
     </main>
