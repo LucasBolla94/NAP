@@ -27,7 +27,7 @@ export default function WhitepaperPage() {
           <h2 className="text-2xl font-semibold mb-3">Tokenomics</h2>
           <ul className="list-disc list-inside space-y-1">
             <li>1 Billion Total Supply (Fixed)</li>
-            <li>30% Fund Reserve (5-year vesting, starting after 1 year)</li>
+            <li>30% Fund Reserve Wallet Address : 5ArPQSA9vM7sukJzsFdkEnUzG5NALCDDcEm6Li5VoZRS</li>
             <li>10% Liquidity on Orca - Wallet: E8E6TgsLVgC7MDo7y7P2Y7kz9syUAmFeVJTijw3okVMH</li>
             <li>3% Airdrop - Wallet: DrqJ7X2UbdeZH64iEgNPW1hf7oMeVkcqxhVf1RKPDyXu</li>
             <li>7% Marketing - Wallet: 5JWD7G8coTQ5ysL8kbhJu1Bsyj9AjE9DRvJEMRqys7sA</li>
