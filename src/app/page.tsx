@@ -39,7 +39,7 @@ export default function Home() {
       style={{ backgroundImage: "url('/bg.png')" }}
     >
       <div className="bg-black/70 rounded-3xl p-8 text-center max-w-xl shadow-2xl border border-white/20">
-        <h1 className="text-4xl font-extrabold text-white mb-4 drop-shadow">🚀 Meme Coin - Solana</h1>
+        <h1 className="text-4xl font-extrabold text-white mb-4 drop-shadow">🚀 NapReserv - Solana</h1>
         <p className="mb-6 text-white text-lg">
           We were tired of watching our money lose value while politicians played games with our future. So, a group of friends came together and launched $NAP — a meme coin with real goals.<br /><br />
           $NAP is built to be fun, but it’s also designed to reward holders with dividends and create a community-powered network where anyone can grow their value. No central banks, no hidden tricks — just vibes, rewards, and transparency.<br /><br />
